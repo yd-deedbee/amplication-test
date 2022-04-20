@@ -47,11 +47,14 @@ export class PostServiceBase {
     return this.prisma.post.delete(args);
   }
 
-  async getUser(parentId: string): Promise<User | null> {
+  async findUser(
+    parentId: string,
+    args: Prisma.UserFindManyArgs
+  ): Promise<User[]> {
     return this.prisma.post
       .findUnique({
         where: { id: parentId },
       })
-      .user();
+      .user(args);
   }
 }

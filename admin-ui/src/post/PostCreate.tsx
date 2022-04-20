@@ -6,8 +6,8 @@ import {
   CreateProps,
   TextInput,
   NumberInput,
-  ReferenceInput,
-  SelectInput,
+  ReferenceArrayInput,
+  SelectArrayInput,
 } from "react-admin";
 
 import { UserTitle } from "../user/UserTitle";
@@ -18,9 +18,14 @@ export const PostCreate = (props: CreateProps): React.ReactElement => {
       <SimpleForm>
         <TextInput label="content" multiline source="content" />
         <NumberInput step={1} label="likes" source="likes" />
-        <ReferenceInput source="user.id" reference="User" label="User">
-          <SelectInput optionText={UserTitle} />
-        </ReferenceInput>
+        <ReferenceArrayInput
+          source="user"
+          reference="User"
+          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+          format={(value: any) => value && value.map((v: any) => v.id)}
+        >
+          <SelectArrayInput optionText={UserTitle} />
+        </ReferenceArrayInput>
       </SimpleForm>
     </Create>
   );

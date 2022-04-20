@@ -305,12 +305,6 @@ export class UserControllerBase {
         id: true,
         likes: true,
         updatedAt: true,
-
-        user: {
-          select: {
-            id: true,
-          },
-        },
       },
     });
     if (results === null) {

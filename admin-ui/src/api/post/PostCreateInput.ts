@@ -1,7 +1,7 @@
-import { UserWhereUniqueInput } from "../user/UserWhereUniqueInput";
+import { UserCreateNestedManyWithoutPostsInput } from "./UserCreateNestedManyWithoutPostsInput";
 
 export type PostCreateInput = {
   content?: string | null;
   likes?: number | null;
-  user?: UserWhereUniqueInput | null;
+  user?: UserCreateNestedManyWithoutPostsInput;
 };

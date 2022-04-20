@@ -6,5 +6,5 @@ export type Post = {
   id: string;
   likes: number | null;
   updatedAt: Date;
-  user?: User | null;
+  user?: Array<User>;
 };
