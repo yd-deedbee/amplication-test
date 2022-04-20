@@ -15,7 +15,6 @@ export const PostList = (props: ListProps): React.ReactElement => {
         <TextField label="content" source="content" />
         <DateField source="createdAt" label="Created At" />
         <TextField label="ID" source="id" />
-        <TextField label="likes" source="likes" />
         <DateField source="updatedAt" label="Updated At" />
       </Datagrid>
     </List>

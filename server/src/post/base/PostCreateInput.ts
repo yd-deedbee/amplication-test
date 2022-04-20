@@ -11,9 +11,10 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, IsInt, ValidateNested } from "class-validator";
-import { UserCreateNestedManyWithoutPostsInput } from "./UserCreateNestedManyWithoutPostsInput";
+import { IsString, IsOptional, ValidateNested } from "class-validator";
+import { LikeCreateNestedManyWithoutPostsInput } from "./LikeCreateNestedManyWithoutPostsInput";
 import { Type } from "class-transformer";
+import { UserCreateNestedManyWithoutPostsInput } from "./UserCreateNestedManyWithoutPostsInput";
 @InputType()
 class PostCreateInput {
   @ApiProperty({
@@ -29,14 +30,15 @@ class PostCreateInput {
 
   @ApiProperty({
     required: false,
-    type: Number,
+    type: () => LikeCreateNestedManyWithoutPostsInput,
   })
-  @IsInt()
+  @ValidateNested()
+  @Type(() => LikeCreateNestedManyWithoutPostsInput)
   @IsOptional()
-  @Field(() => Number, {
+  @Field(() => LikeCreateNestedManyWithoutPostsInput, {
     nullable: true,
   })
-  likes?: number | null;
+  likes?: LikeCreateNestedManyWithoutPostsInput;
 
   @ApiProperty({
     required: false,

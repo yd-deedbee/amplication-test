@@ -25,6 +25,8 @@ import { DeletePostArgs } from "./DeletePostArgs";
 import { PostFindManyArgs } from "./PostFindManyArgs";
 import { PostFindUniqueArgs } from "./PostFindUniqueArgs";
 import { Post } from "./Post";
+import { LikeFindManyArgs } from "../../like/base/LikeFindManyArgs";
+import { Like } from "../../like/base/Like";
 import { UserFindManyArgs } from "../../user/base/UserFindManyArgs";
 import { User } from "../../user/base/User";
 import { PostService } from "../post.service";
@@ -202,6 +204,32 @@ export class PostResolverBase {
       }
       throw error;
     }
+  }
+
+  @graphql.ResolveField(() => [Like])
+  @nestAccessControl.UseRoles({
+    resource: "Post",
+    action: "read",
+    possession: "any",
+  })
+  async likes(
+    @graphql.Parent() parent: Post,
+    @graphql.Args() args: LikeFindManyArgs,
+    @gqlUserRoles.UserRoles() userRoles: string[]
+  ): Promise<Like[]> {
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "Like",
+    });
+    const results = await this.service.findLikes(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results.map((result) => permission.filter(result));
   }
 
   @graphql.ResolveField(() => [User])

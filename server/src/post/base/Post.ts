@@ -11,14 +11,9 @@ https://docs.amplication.com/docs/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsString,
-  IsOptional,
-  IsDate,
-  IsInt,
-  ValidateNested,
-} from "class-validator";
+import { IsString, IsOptional, IsDate, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
+import { Like } from "../../like/base/Like";
 import { User } from "../../user/base/User";
 @ObjectType()
 class Post {
@@ -51,14 +46,12 @@ class Post {
 
   @ApiProperty({
     required: false,
-    type: Number,
+    type: () => [Like],
   })
-  @IsInt()
+  @ValidateNested()
+  @Type(() => Like)
   @IsOptional()
-  @Field(() => Number, {
-    nullable: true,
-  })
-  likes!: number | null;
+  likes?: Array<Like>;
 
   @ApiProperty({
     required: true,
