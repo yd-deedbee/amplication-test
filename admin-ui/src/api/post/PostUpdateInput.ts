@@ -1,7 +1,7 @@
-import { UserWhereUniqueInput } from "../user/UserWhereUniqueInput";
+import { UserUpdateManyWithoutPostsInput } from "./UserUpdateManyWithoutPostsInput";
 
 export type PostUpdateInput = {
   content?: string | null;
   likes?: number | null;
-  user?: UserWhereUniqueInput | null;
+  user?: UserUpdateManyWithoutPostsInput;
 };

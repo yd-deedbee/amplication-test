@@ -6,5 +6,4 @@ export type PostOrderByInput = {
   id?: SortOrder;
   likes?: SortOrder;
   updatedAt?: SortOrder;
-  userId?: SortOrder;
 };
