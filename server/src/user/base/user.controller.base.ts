@@ -27,6 +27,9 @@ import { UserWhereUniqueInput } from "./UserWhereUniqueInput";
 import { UserFindManyArgs } from "./UserFindManyArgs";
 import { UserUpdateInput } from "./UserUpdateInput";
 import { User } from "./User";
+import { Post } from "../../post/base/Post";
+import { PostFindManyArgs } from "../../post/base/PostFindManyArgs";
+import { PostWhereUniqueInput } from "../../post/base/PostWhereUniqueInput";
 @swagger.ApiBearerAuth()
 export class UserControllerBase {
   constructor(
@@ -268,5 +271,188 @@ export class UserControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Get("/:id/posts")
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "read",
+    possession: "any",
+  })
+  @ApiNestedQuery(PostFindManyArgs)
+  async findManyPosts(
+    @common.Req() request: Request,
+    @common.Param() params: UserWhereUniqueInput,
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<Post[]> {
+    const query = plainToClass(PostFindManyArgs, request.query);
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "read",
+      possession: "any",
+      resource: "Post",
+    });
+    const results = await this.service.findPosts(params.id, {
+      ...query,
+      select: {
+        content: true,
+        createdAt: true,
+        id: true,
+        likes: true,
+        updatedAt: true,
+
+        user: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results.map((result) => permission.filter(result));
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Post("/:id/posts")
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "update",
+    possession: "any",
+  })
+  async createPosts(
+    @common.Param() params: UserWhereUniqueInput,
+    @common.Body() body: UserWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      posts: {
+        connect: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "User",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"User"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Patch("/:id/posts")
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "update",
+    possession: "any",
+  })
+  async updatePosts(
+    @common.Param() params: UserWhereUniqueInput,
+    @common.Body() body: PostWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      posts: {
+        set: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "User",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"User"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.UseInterceptors(nestMorgan.MorganInterceptor("combined"))
+  @common.UseGuards(
+    defaultAuthGuard.DefaultAuthGuard,
+    nestAccessControl.ACGuard
+  )
+  @common.Delete("/:id/posts")
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "update",
+    possession: "any",
+  })
+  async deletePosts(
+    @common.Param() params: UserWhereUniqueInput,
+    @common.Body() body: UserWhereUniqueInput[],
+    @nestAccessControl.UserRoles() userRoles: string[]
+  ): Promise<void> {
+    const data = {
+      posts: {
+        disconnect: body,
+      },
+    };
+    const permission = this.rolesBuilder.permission({
+      role: userRoles,
+      action: "update",
+      possession: "any",
+      resource: "User",
+    });
+    const invalidAttributes = abacUtil.getInvalidAttributes(permission, data);
+    if (invalidAttributes.length) {
+      const roles = userRoles
+        .map((role: string) => JSON.stringify(role))
+        .join(",");
+      throw new common.ForbiddenException(
+        `Updating the relationship: ${
+          invalidAttributes[0]
+        } of ${"User"} is forbidden for roles: ${roles}`
+      );
+    }
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 }
