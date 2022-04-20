@@ -1,0 +1,19 @@
+{
+  "dataServiceGeneratorVersion": "0.12.4",
+  "appInfo": {
+    "name": "amplication-test",
+    "description": "",
+    "version": "30gqgt7e",
+    "id": "cl26tvsos154265501s6m0evciyv",
+    "url": "https://app.amplication.com/cl26tvsos154265501s6m0evciyv",
+    "settings": {
+      "dbHost": "localhost",
+      "dbName": "db",
+      "dbPassword": "admin",
+      "dbPort": 5432,
+      "dbUser": "admin",
+      "appId": "cl26tvsos154265501s6m0evciyv",
+      "authProvider": "Jwt"
+    }
+  }
+}
