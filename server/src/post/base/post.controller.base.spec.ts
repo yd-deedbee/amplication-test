@@ -14,14 +14,12 @@ const CREATE_INPUT = {
   content: "exampleContent",
   createdAt: new Date(),
   id: "exampleId",
-  likes: 42,
   updatedAt: new Date(),
 };
 const CREATE_RESULT = {
   content: "exampleContent",
   createdAt: new Date(),
   id: "exampleId",
-  likes: 42,
   updatedAt: new Date(),
 };
 const FIND_MANY_RESULT = [
@@ -29,7 +27,6 @@ const FIND_MANY_RESULT = [
     content: "exampleContent",
     createdAt: new Date(),
     id: "exampleId",
-    likes: 42,
     updatedAt: new Date(),
   },
 ];
@@ -37,7 +34,6 @@ const FIND_ONE_RESULT = {
   content: "exampleContent",
   createdAt: new Date(),
   id: "exampleId",
-  likes: 42,
   updatedAt: new Date(),
 };
 
