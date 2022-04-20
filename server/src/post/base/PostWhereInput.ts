@@ -15,9 +15,10 @@ import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { Type } from "class-transformer";
 import { IsOptional, ValidateNested } from "class-validator";
 import { StringFilter } from "../../util/StringFilter";
-import { PostListRelationFilter } from "../../post/base/PostListRelationFilter";
+import { IntNullableFilter } from "../../util/IntNullableFilter";
+import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 @InputType()
-class UserWhereInput {
+class PostWhereInput {
   @ApiProperty({
     required: false,
     type: StringNullableFilter,
@@ -27,7 +28,7 @@ class UserWhereInput {
   @Field(() => StringNullableFilter, {
     nullable: true,
   })
-  firstName?: StringNullableFilter;
+  content?: StringNullableFilter;
 
   @ApiProperty({
     required: false,
@@ -42,36 +43,25 @@ class UserWhereInput {
 
   @ApiProperty({
     required: false,
-    type: StringNullableFilter,
+    type: IntNullableFilter,
   })
-  @Type(() => StringNullableFilter)
+  @Type(() => IntNullableFilter)
   @IsOptional()
-  @Field(() => StringNullableFilter, {
+  @Field(() => IntNullableFilter, {
     nullable: true,
   })
-  lastName?: StringNullableFilter;
+  likes?: IntNullableFilter;
 
   @ApiProperty({
     required: false,
-    type: () => PostListRelationFilter,
+    type: () => UserWhereUniqueInput,
   })
   @ValidateNested()
-  @Type(() => PostListRelationFilter)
+  @Type(() => UserWhereUniqueInput)
   @IsOptional()
-  @Field(() => PostListRelationFilter, {
+  @Field(() => UserWhereUniqueInput, {
     nullable: true,
   })
-  posts?: PostListRelationFilter;
-
-  @ApiProperty({
-    required: false,
-    type: StringFilter,
-  })
-  @Type(() => StringFilter)
-  @IsOptional()
-  @Field(() => StringFilter, {
-    nullable: true,
-  })
-  username?: StringFilter;
+  user?: UserWhereUniqueInput;
 }
-export { UserWhereInput };
+export { PostWhereInput };
